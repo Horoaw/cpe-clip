@@ -22,9 +22,34 @@ conda run -n $ENV_NAME pip install \
     pillow \
     tqdm \
     scikit-learn \
-    pyyaml
+    pyyaml \
+    gdown
 
-# 5. 安装论文特有的学习率调度器 (从 GitHub 直接拉取)
+# 5. 下载并准备数据 (CUB200 和 CIFAR100)
+echo "正在下载数据集和划分文件..."
+
+# 创建目录
+mkdir -p data splits
+
+# 下载 CUB200 数据集 (Google Drive ID: 1PumwrWQCNZTBbgW6bbZ6NDD4xyA0wGfH)
+echo "下载 CUB200 数据集..."
+conda run -n $ENV_NAME gdown 1PumwrWQCNZTBbgW6bbZ6NDD4xyA0wGfH -O data/cub200.zip
+unzip -o data/cub200.zip -d data/
+rm data/cub200.zip
+
+# 下载 CIFAR100 划分文件 (Google Drive ID: 1TpDUpUoy6pHUShbmnaRYFs1TfydV65-e)
+echo "下载 CIFAR100 划分文件..."
+conda run -n $ENV_NAME gdown 1TpDUpUoy6pHUShbmnaRYFs1TfydV65-e -O splits/cpe-clip-cifar100-splits.zip
+unzip -o splits/cpe-clip-cifar100-splits.zip -d splits/
+rm splits/cpe-clip-cifar100-splits.zip
+
+# 下载 CUB200 划分文件 (Google Drive ID: 1JEtSvUTJfVaycysCiIgoqLexHlEeubb1)
+echo "下载 CUB200 划分文件..."
+conda run -n $ENV_NAME gdown 1JEtSvUTJfVaycysCiIgoqLexHlEeubb1 -O splits/cpe-clip-cub200-splits.zip
+unzip -o splits/cpe-clip-cub200-splits.zip -d splits/
+rm splits/cpe-clip-cub200-splits.zip
+
+# 6. 安装论文特有的学习率调度器 (从 GitHub 直接拉取)
 echo "正在安装特殊的学习率调度器..."
 conda run -n $ENV_NAME pip install git+https://github.com/katsura-jp/pytorch-cosine-annealing-with-warmup.git
 
